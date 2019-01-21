@@ -9,15 +9,15 @@ defmodule GroupCollect.Report.ImportCSVTest do
   @tabulated_csv "Passenger ID\tFull Name\tGender\tEmail\tPackage\tDate of Birth\tStatus"
 
   describe "CommaCSV" do
-    test "validate_header/1 should return true for right values" do
+    test "validate_header/1 should return true when csv have all the valid values" do
       assert true == ImportCSV.validate_header(@valid_comma_csv)
     end
 
-    test "validate_header/1 should return false for wrong header keys" do
+    test "validate_header/1 should return false for missing keys" do
       assert false == ImportCSV.validate_header(@invalid_comma_csv)
     end
 
-    test "parse/1 should convert to map no matter the order" do
+    test "parse_valid/1 should convert the csv a map no matter the order" do
       right_map = [
         %{
           "Date of Birth" => "2006-02-14",
@@ -30,8 +30,10 @@ defmodule GroupCollect.Report.ImportCSVTest do
         }
       ]
 
-      assert right_map == ImportCSV.parse(@valid_comma_csv)
-      assert right_map == ImportCSV.parse(@valid_out_or_order_comma_csv)
+      assert {:ok, right_map} == ImportCSV.parse(@valid_comma_csv)
+      assert {:ok, right_map} == ImportCSV.parse(@valid_out_or_order_comma_csv)
+      assert {:error, _} = ImportCSV.parse(@invalid_comma_csv)
+      assert {:error, _} = ImportCSV.parse(@tabulated_csv)
     end
   end
 end
