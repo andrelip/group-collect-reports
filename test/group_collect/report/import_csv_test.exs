@@ -2,6 +2,7 @@ defmodule GroupCollect.Report.ImportCSVTest do
   use GroupCollect.DataCase
 
   alias GroupCollect.Report.ImportCSV
+  alias GroupCollect.Report.ReportRow
 
   @valid_comma_csv "Passenger ID,Full Name,Gender,Email,Package,Date of Birth,Status\n370,Jeff Rustic,male,jeffrustic@gmail.com,Basic Package,2006-02-14,Fully Paid"
   @valid_out_or_order_comma_csv "Full Name,Passenger ID,Gender,Email,Package,Date of Birth,Status\nJeff Rustic,370,male,jeffrustic@gmail.com,Basic Package,2006-02-14,Fully Paid"
@@ -19,14 +20,14 @@ defmodule GroupCollect.Report.ImportCSVTest do
 
     test "parse_valid/1 should convert the csv a map no matter the order" do
       right_map = [
-        %{
-          "Date of Birth" => "2006-02-14",
-          "Email" => "jeffrustic@gmail.com",
-          "Full Name" => "Jeff Rustic",
-          "Gender" => "male",
-          "Package" => "Basic Package",
-          "Passenger ID" => "370",
-          "Status" => "Fully Paid"
+        %ReportRow{
+          :birthday => "2006-02-14",
+          :email => "jeffrustic@gmail.com",
+          :full_name => "Jeff Rustic",
+          :gender => "male",
+          :package => "Basic Package",
+          :passenger_id => "370",
+          :status => "Fully Paid"
         }
       ]
 
@@ -35,5 +36,29 @@ defmodule GroupCollect.Report.ImportCSVTest do
       assert {:error, _} = ImportCSV.parse(@invalid_comma_csv)
       assert {:error, _} = ImportCSV.parse(@tabulated_csv)
     end
+  end
+
+  test "format_map/1 should convert the csv row into report row struct" do
+    input = %{
+      "Date of Birth" => "2006-02-14",
+      "Email" => "jeffrustic@gmail.com",
+      "Full Name" => "Jeff Rustic",
+      "Gender" => "male",
+      "Package" => "Basic Package",
+      "Passenger ID" => "370",
+      "Status" => "Fully Paid"
+    }
+
+    output = %ReportRow{
+      :birthday => "2006-02-14",
+      :email => "jeffrustic@gmail.com",
+      :full_name => "Jeff Rustic",
+      :gender => "male",
+      :package => "Basic Package",
+      :passenger_id => "370",
+      :status => "Fully Paid"
+    }
+
+    assert output == input |> ImportCSV.format_map()
   end
 end

@@ -8,6 +8,9 @@ defmodule GroupCollect.Report.ImportCSV do
   """
 
   alias NimbleCSV.RFC4180, as: CSV
+  alias GroupCollect.Report.ReportRow
+
+  defstruct([:passenger_id, :full_name, :gender, :email, :package, :birthday, :status])
 
   @header_keys [
     "Passenger ID",
@@ -20,15 +23,6 @@ defmodule GroupCollect.Report.ImportCSV do
   ]
 
   @type csv_content :: binary()
-  @type t :: %{
-          "Passenger ID": String.t(),
-          "Full Name": String.t(),
-          Gender: String.t(),
-          Email: String.t(),
-          Package: String.t(),
-          "Date of Birth": String.t(),
-          Status: String.t()
-        }
 
   @doc """
   Verifies if the csv are well formated and contains all the required columns
@@ -47,7 +41,7 @@ defmodule GroupCollect.Report.ImportCSV do
   Receives the csv string and tries to parse into a map
   """
   @spec parse(csv_content()) ::
-          {:error, %{msg: binary(), required: [binary(), ...]}} | {:ok, [t(), ...]}
+          {:error, %{msg: binary(), required: [binary(), ...]}} | {:ok, [ReportRow.t(), ...]}
   def parse(string) do
     case validate_header(string) do
       true -> {:ok, parse_valid(string)}
@@ -69,7 +63,21 @@ defmodule GroupCollect.Report.ImportCSV do
       header
       |> Enum.zip(row)
       |> Enum.into(%{})
+      |> format_map
     end)
+  end
+
+  @spec format_map(nil | keyword() | map()) :: ReportRow.t()
+  def format_map(map_raw) do
+    %ReportRow{
+      passenger_id: map_raw["Passenger ID"],
+      full_name: map_raw["Full Name"],
+      gender: map_raw["Gender"],
+      email: map_raw["Email"],
+      package: map_raw["Package"],
+      birthday: map_raw["Date of Birth"],
+      status: map_raw["Status"]
+    }
   end
 
   defp validate_header_keys(header) do
