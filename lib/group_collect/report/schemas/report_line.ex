@@ -12,8 +12,6 @@ defmodule GroupCollect.Report.ReportLine do
     field :package, :string
     field :passenger_id, :integer
     field :status, :string
-
-    timestamps()
   end
 
   @doc false

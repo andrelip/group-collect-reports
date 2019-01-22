@@ -2,13 +2,11 @@ defmodule GroupCollect.Report.Passenger do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "passengers" do
     field :birthday, :date
     field :email, :string
     field :full_name, :string
     field :gender, :string
-    field :id, :integer
 
     timestamps()
   end

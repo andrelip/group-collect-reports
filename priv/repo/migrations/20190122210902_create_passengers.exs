@@ -3,7 +3,6 @@ defmodule GroupCollect.Repo.Migrations.CreatePassengers do
 
   def change do
     create table(:passengers) do
-      add :id, :integer
       add :full_name, :string
       add :gender, :string
       add :email, :string
@@ -11,6 +10,5 @@ defmodule GroupCollect.Repo.Migrations.CreatePassengers do
 
       timestamps()
     end
-
   end
 end
