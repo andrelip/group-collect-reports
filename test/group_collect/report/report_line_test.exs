@@ -1,4 +1,4 @@
-defmodule GroupCollect.Report.ImportCSVTest do
+defmodule GroupCollect.Report.ReportLineTest do
   use GroupCollect.DataCase
 
   alias GroupCollect.Report.ReportLine
