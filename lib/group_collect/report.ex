@@ -2,6 +2,7 @@ defmodule GroupCollect.Report do
   alias GroupCollect.Report.ImportCSV
   alias GroupCollect.Report.ReportLine
   alias GroupCollect.Report.Passenger
+  alias GroupCollect.Report.PassengerList
   alias GroupCollect.Repo
   alias Ecto.Multi
 
@@ -20,6 +21,9 @@ defmodule GroupCollect.Report do
 
       Multi.new()
       |> Multi.insert(:passenger, Passenger.insert_changeset(item))
+      |> Multi.insert(:passenger_list, fn %{passenger: passenger} ->
+        PassengerList.insert_changeset(passenger, item)
+      end)
       |> Repo.transaction()
     end)
   end
