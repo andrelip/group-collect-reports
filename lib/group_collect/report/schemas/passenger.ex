@@ -1,4 +1,6 @@
 defmodule GroupCollect.Report.Passenger do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

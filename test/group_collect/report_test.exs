@@ -51,9 +51,4 @@ defmodule GroupCollect.ReportTest do
              } = first_passenger_list_row
     end
   end
-
-  defp csv_rows do
-    csv_rows = String.split(@csv, "\n")
-    csv_rows_count = length(csv_rows) - 1
-  end
 end
