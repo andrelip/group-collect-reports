@@ -18,24 +18,31 @@ defmodule GroupCollect.Report do
   end
 
   defp insert_validated_data(data) do
-    data
-    |> Enum.reduce(Multi.new(), fn item, multi ->
-      item = item |> Map.put_new(:id, item.passenger_id)
+    {multi, _} =
+      data
+      |> Enum.reduce({Multi.new(), 1}, fn item, {multi, idx} ->
+        item = item |> Map.put_new(:id, item.passenger_id)
 
-      passenger_id = item.passenger_id
+        passenger_transaction_id = {:passenger, idx}
+        passenger_list_transaction_id = {:passenger_list, idx}
 
-      passenger_transaction_id = {:passenger, passenger_id}
-      passenger_list_transaction_id = {:passenger_list, passenger_id}
+        multi =
+          multi
+          |> Multi.insert(passenger_transaction_id, Passenger.insert_changeset(item))
+          |> Multi.insert(passenger_list_transaction_id, fn %{
+                                                              ^passenger_transaction_id =>
+                                                                passenger
+                                                            } ->
+            PassengerList.insert_changeset(passenger, item)
+          end)
 
-      multi
-      |> Multi.insert(passenger_transaction_id, Passenger.insert_changeset(item))
-      |> Multi.insert(passenger_list_transaction_id, fn %{
-                                                          ^passenger_transaction_id => passenger
-                                                        } ->
-        PassengerList.insert_changeset(passenger, item)
+        {multi, idx + 1}
       end)
-    end)
-    |> Repo.transaction()
+
+    case Repo.transaction(multi) do
+      {:error, _, changeset, _} -> {:error, changeset}
+      any -> any
+    end
   end
 
   defp map_into_changeset(csv_rows) do
