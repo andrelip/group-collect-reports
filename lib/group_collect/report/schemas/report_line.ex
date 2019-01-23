@@ -4,7 +4,7 @@ defmodule GroupCollect.Report.ReportLine do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "report_lines" do
+  embedded_schema do
     field :birthday, :date
     field :email, :string
     field :full_name, :string

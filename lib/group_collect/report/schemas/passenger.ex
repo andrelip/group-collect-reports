@@ -14,6 +14,12 @@ defmodule GroupCollect.Report.Passenger do
   @doc false
   def changeset(passenger, attrs) do
     passenger
+    |> cast(attrs, [:full_name, :gender, :email, :birthday])
+    |> validate_required([:full_name, :gender, :email, :birthday])
+  end
+
+  def insert_changeset(attrs) do
+    %__MODULE__{}
     |> cast(attrs, [:id, :full_name, :gender, :email, :birthday])
     |> validate_required([:id, :full_name, :gender, :email, :birthday])
   end
