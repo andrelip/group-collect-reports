@@ -24,5 +24,6 @@ defmodule GroupCollect.Report.Passenger do
     %__MODULE__{}
     |> cast(attrs, [:id, :full_name, :gender, :email, :birthday])
     |> validate_required([:id, :full_name, :gender, :email, :birthday])
+    |> unique_constraint(:id, name: :passengers_pkey)
   end
 end
