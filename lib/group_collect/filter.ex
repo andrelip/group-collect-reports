@@ -3,10 +3,24 @@ defmodule GroupCollect.Report.Filter do
   API for filtering the report list
   """
 
+  @type t :: %{
+          optional(String.t()) => String.t()
+        }
   import Ecto.Query
 
   alias GroupCollect.Report.ReportRowView
 
+  @doc """
+  Receives a map with the desired filters and returns a query scope
+
+  The accepted keys/values are:
+
+  age: "above 18" | "under 18"
+  gender: "male" | "female" | "other"
+  package: "Basic Package" | "Presidential Package" | "Basic Package" | "Basic Package" | "Senator Package"
+  status: "Fully Paid" | "Partially Paid" | "Created" | "Finished Wizard" | "Cancelled"
+  """
+  @spec filter(t()) :: Ecto.Queryable.t()
   def filter(params) do
     params
     |> reduce_apply_filters(ReportRowView)
