@@ -4,15 +4,15 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
   alias GroupCollect.Report.PassengerListSchema
   alias GroupCollect.Repo
 
-  alias GroupCollect.Report.ImportFromCSV
+  alias GroupCollect.Report.Import
   @csv File.read!("test/fixtures/files/passenger_statuses.csv")
   @csv_with_duplicated_entries File.read!("test/fixtures/files/passenger_with_duplicated_id.csv")
 
-  describe "load_from_csv/1" do
+  describe "from_csv/1" do
     test "should create passengers" do
       csv_rows = String.split(@csv, "\n")
       csv_rows_count = length(csv_rows) - 1
-      assert {:ok, _} = ImportFromCSV.load_from_csv(@csv)
+      assert {:ok, _} = Import.from_csv(@csv)
       assert csv_rows_count == Repo.aggregate(PassengerSchema, :count, :id)
       first_passenger = from(p in PassengerSchema, order_by: [asc: :id], limit: 1) |> Repo.one()
 
@@ -26,7 +26,7 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
     end
 
     test "should raise an error for duplicated passengers" do
-      assert {:error, changeset} = ImportFromCSV.load_from_csv(@csv_with_duplicated_entries)
+      assert {:error, changeset} = Import.from_csv(@csv_with_duplicated_entries)
 
       assert changeset.errors == [
                id:
@@ -38,7 +38,7 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
     end
 
     test "should insert passenger into the respective list" do
-      ImportFromCSV.load_from_csv(@csv)
+      Import.from_csv(@csv)
       csv_rows = String.split(@csv, "\n")
       csv_rows_count = length(csv_rows) - 1
 

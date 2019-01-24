@@ -7,7 +7,7 @@ defmodule GroupCollect.Report.ReportRowViewTest do
   @csv File.read!("test/fixtures/files/passenger_statuses.csv")
 
   test "should display the denormalized report row" do
-    Report.load_from_csv(@csv)
+    Report.from_csv(@csv)
 
     assert %GroupCollect.Report.ReportRowView{
              birthday: ~D[2006-02-14],

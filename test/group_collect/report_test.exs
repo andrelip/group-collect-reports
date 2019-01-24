@@ -6,11 +6,11 @@ defmodule GroupCollect.ReportTest do
   alias GroupCollect.Report
   @csv File.read!("test/fixtures/files/passenger_statuses.csv")
 
-  describe "load_from_csv/1" do
+  describe "from_csv/1" do
     test "should create passengers" do
       csv_rows = String.split(@csv, "\n")
       csv_rows_count = length(csv_rows) - 1
-      assert {:ok, _} = Report.load_from_csv(@csv)
+      assert {:ok, _} = Report.from_csv(@csv)
       assert csv_rows_count == Repo.aggregate(PassengerSchema, :count, :id)
       first_passenger = from(p in PassengerSchema, order_by: [asc: :id], limit: 1) |> Repo.one()
 

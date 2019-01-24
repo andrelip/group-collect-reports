@@ -1,6 +1,7 @@
-defmodule GroupCollect.Report.ImportFromCSV do
+defmodule GroupCollect.Report.Import do
   @moduledoc """
-  Handles to data load from the standard CSV model
+  Acts like a gateway that receives data from different sources and
+  adds to the domain and database.
   """
   alias GroupCollect.Report.CSVParser
   alias GroupCollect.Report.ReportLine
@@ -16,9 +17,9 @@ defmodule GroupCollect.Report.ImportFromCSV do
   Receives the content of a CSV file and tries to insert the data into
   the proper tables.
   """
-  @spec load_from_csv(binary()) ::
+  @spec from_csv(binary()) ::
           {:ok, %{optional(multi_operation_key) => passenger}} | {:error, any()}
-  def load_from_csv(csv_content) do
+  def from_csv(csv_content) do
     with {:ok, data} <- CSVParser.parse(csv_content) do
       load(data)
     end
