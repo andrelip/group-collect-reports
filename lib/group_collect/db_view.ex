@@ -12,8 +12,9 @@ defmodule GroupCollect.DBView do
     try do
       {:ok, Ecto.Adapters.SQL.query!(Repo, query, term)}
     rescue
-      e in Mariaex.Error ->
-        Logger.warn("create_group_view/0 failed. #{e.mariadb.message} (#{e.mariadb.code})")
+      e in Postgrex.Error ->
+        Logger.warn("create_view_from_query/2 failed. #{e.postgres.message} (#{e.postgres.code})")
+        raise e
     end
   end
 
@@ -25,8 +26,8 @@ defmodule GroupCollect.DBView do
     try do
       {:ok, Ecto.Adapters.SQL.query!(Repo, query, [])}
     rescue
-      e in Mariaex.Error ->
-        Logger.warn("create_group_view/0 failed. #{e.mariadb.message} (#{e.mariadb.code})")
+      e in Postgrex.Error ->
+        Logger.warn("create_group_view/0 failed. #{e.postgres.message} (#{e.postgres.code})")
     end
   end
 end
