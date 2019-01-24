@@ -9,6 +9,15 @@ defmodule GroupCollect.Report.ImportFromCSV do
   alias GroupCollect.Repo
   alias Ecto.Multi
 
+  @type multi_operation_key :: {:passenger | :passenger_list, integer()}
+  @type passenger :: %PassengerSchema{}
+
+  @doc """
+  Receives the content of a CSV file and tries to insert the data into
+  the proper tables.
+  """
+  @spec load_from_csv(binary()) ::
+          {:ok, %{optional(multi_operation_key) => passenger}} | {:error, any()}
   def load_from_csv(data) do
     with {:ok, data} <- CSVParser.parse(data),
          rows <- map_into_changeset(data),
