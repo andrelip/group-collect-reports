@@ -24,40 +24,5 @@ defmodule GroupCollect.ReportTest do
                id: 370
              } = first_passenger
     end
-
-    test "should raise an error for duplicated passengers" do
-      assert {:error, changeset} = Report.load_from_csv(@csv_with_duplicated_entries)
-
-      assert changeset.errors == [
-               id:
-                 {"has already been taken",
-                  [constraint: :unique, constraint_name: "passengers_pkey"]}
-             ]
-
-      assert 0 == Repo.aggregate(PassengerSchema, :count, :id)
-    end
-
-    test "should insert passenger into the respective list" do
-      Report.load_from_csv(@csv)
-      csv_rows = String.split(@csv, "\n")
-      csv_rows_count = length(csv_rows) - 1
-
-      assert csv_rows_count ==
-               from(p in PassengerSchema,
-                 join: pl in PassengerListSchema,
-                 on: pl.passenger_id == p.id,
-                 select: count(pl.id)
-               )
-               |> Repo.one()
-
-      first_passenger_list_row =
-        from(p in PassengerListSchema, order_by: [asc: :passenger_id], limit: 1) |> Repo.one()
-
-      assert %GroupCollect.Report.PassengerListSchema{
-               package: "Basic Package",
-               passenger_id: 370,
-               status: "Fully Paid"
-             } = first_passenger_list_row
-    end
   end
 end
