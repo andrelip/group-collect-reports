@@ -18,10 +18,15 @@ defmodule GroupCollect.Report.ImportFromCSV do
   """
   @spec load_from_csv(binary()) ::
           {:ok, %{optional(multi_operation_key) => passenger}} | {:error, any()}
-  def load_from_csv(data) do
-    with {:ok, data} <- CSVParser.parse(data),
-         rows <- map_into_changeset(data),
-         {:ok, valid_changesets} <- validate_data(rows) do
+  def load_from_csv(csv_content) do
+    with {:ok, data} <- CSVParser.parse(csv_content) do
+      load(data)
+    end
+  end
+
+  defp load(data) do
+    with items <- map_into_changeset(data),
+         {:ok, valid_changesets} <- validate_data(items) do
       insert_validated_data(valid_changesets)
     end
   end

@@ -4,7 +4,7 @@ defmodule GroupCollect.Report.ReportRowViewTest do
 
   alias GroupCollect.Report
   alias GroupCollect.Report.ReportRowView
-  @csv File.read!("test/fixture_files/passenger_statuses.csv")
+  @csv File.read!("test/fixtures/files/passenger_statuses.csv")
 
   test "should display the denormalized report row" do
     Report.load_from_csv(@csv)

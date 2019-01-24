@@ -4,7 +4,7 @@ defmodule GroupCollect.ReportTest do
   alias GroupCollect.Repo
 
   alias GroupCollect.Report
-  @csv File.read!("test/fixture_files/passenger_statuses.csv")
+  @csv File.read!("test/fixtures/files/passenger_statuses.csv")
 
   describe "load_from_csv/1" do
     test "should create passengers" do

@@ -5,8 +5,8 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
   alias GroupCollect.Repo
 
   alias GroupCollect.Report.ImportFromCSV
-  @csv File.read!("test/fixture_files/passenger_statuses.csv")
-  @csv_with_duplicated_entries File.read!("test/fixture_files/passenger_with_duplicated_id.csv")
+  @csv File.read!("test/fixtures/files/passenger_statuses.csv")
+  @csv_with_duplicated_entries File.read!("test/fixtures/files/passenger_with_duplicated_id.csv")
 
   describe "load_from_csv/1" do
     test "should create passengers" do
