@@ -2,13 +2,13 @@ defmodule GroupCollect.Repo.Migrations.CreateReportView do
   use Ecto.Migration
   import Ecto.Query
   alias GroupCollect.DBView
-  alias GroupCollect.Report.Passenger
-  alias GroupCollect.Report.PassengerList
+  alias GroupCollect.Report.PassengerSchema
+  alias GroupCollect.Report.PassengerListSchema
 
   def up do
     query =
-      from(p in Passenger,
-        join: pl in PassengerList,
+      from(p in PassengerSchema,
+        join: pl in PassengerListSchema,
         on: pl.passenger_id == p.id,
         select: %{
           passenger_id: p.id,

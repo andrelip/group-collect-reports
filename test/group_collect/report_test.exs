@@ -1,7 +1,7 @@
 defmodule GroupCollect.ReportTest do
   use GroupCollect.DataCase
-  alias GroupCollect.Report.Passenger
-  alias GroupCollect.Report.PassengerList
+  alias GroupCollect.Report.PassengerSchema
+  alias GroupCollect.Report.PassengerListSchema
   alias GroupCollect.Repo
 
   alias GroupCollect.Report
@@ -13,10 +13,10 @@ defmodule GroupCollect.ReportTest do
       csv_rows = String.split(@csv, "\n")
       csv_rows_count = length(csv_rows) - 1
       assert {:ok, _} = Report.load_from_csv(@csv)
-      assert csv_rows_count == Repo.aggregate(Passenger, :count, :id)
-      first_passenger = from(p in Passenger, order_by: [asc: :id], limit: 1) |> Repo.one()
+      assert csv_rows_count == Repo.aggregate(PassengerSchema, :count, :id)
+      first_passenger = from(p in PassengerSchema, order_by: [asc: :id], limit: 1) |> Repo.one()
 
-      assert %GroupCollect.Report.Passenger{
+      assert %GroupCollect.Report.PassengerSchema{
                birthday: ~D[2006-02-14],
                email: "jeffrustic@gmail.com",
                full_name: "Jeff Rustic",
@@ -34,7 +34,7 @@ defmodule GroupCollect.ReportTest do
                   [constraint: :unique, constraint_name: "passengers_pkey"]}
              ]
 
-      assert 0 == Repo.aggregate(Passenger, :count, :id)
+      assert 0 == Repo.aggregate(PassengerSchema, :count, :id)
     end
 
     test "should insert passenger into the respective list" do
@@ -43,17 +43,17 @@ defmodule GroupCollect.ReportTest do
       csv_rows_count = length(csv_rows) - 1
 
       assert csv_rows_count ==
-               from(p in Passenger,
-                 join: pl in PassengerList,
+               from(p in PassengerSchema,
+                 join: pl in PassengerListSchema,
                  on: pl.passenger_id == p.id,
                  select: count(pl.id)
                )
                |> Repo.one()
 
       first_passenger_list_row =
-        from(p in PassengerList, order_by: [asc: :passenger_id], limit: 1) |> Repo.one()
+        from(p in PassengerListSchema, order_by: [asc: :passenger_id], limit: 1) |> Repo.one()
 
-      assert %GroupCollect.Report.PassengerList{
+      assert %GroupCollect.Report.PassengerListSchema{
                package: "Basic Package",
                passenger_id: 370,
                status: "Fully Paid"

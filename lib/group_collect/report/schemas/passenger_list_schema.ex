@@ -1,4 +1,4 @@
-defmodule GroupCollect.Report.PassengerList do
+defmodule GroupCollect.Report.PassengerListSchema do
   @moduledoc false
 
   use Ecto.Schema

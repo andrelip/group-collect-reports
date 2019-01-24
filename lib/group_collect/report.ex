@@ -4,8 +4,8 @@ defmodule GroupCollect.Report do
   """
   alias GroupCollect.Report.ImportCSV
   alias GroupCollect.Report.ReportLine
-  alias GroupCollect.Report.Passenger
-  alias GroupCollect.Report.PassengerList
+  alias GroupCollect.Report.PassengerSchema
+  alias GroupCollect.Report.PassengerListSchema
   alias GroupCollect.Repo
   alias Ecto.Multi
 
@@ -28,12 +28,12 @@ defmodule GroupCollect.Report do
 
         multi =
           multi
-          |> Multi.insert(passenger_transaction_id, Passenger.insert_changeset(item))
+          |> Multi.insert(passenger_transaction_id, PassengerSchema.insert_changeset(item))
           |> Multi.insert(passenger_list_transaction_id, fn %{
                                                               ^passenger_transaction_id =>
                                                                 passenger
                                                             } ->
-            PassengerList.insert_changeset(passenger, item)
+            PassengerListSchema.insert_changeset(passenger, item)
           end)
 
         {multi, idx + 1}
