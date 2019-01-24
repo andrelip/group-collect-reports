@@ -4,7 +4,6 @@ defmodule GroupCollect.DBView do
 
   def create_view_from_query(query, view_name) do
     {table_query, term} = Repo.to_sql(:all, query)
-    IO.inspect(table_query)
 
     query = """
     CREATE VIEW #{view_name} AS #{table_query}
