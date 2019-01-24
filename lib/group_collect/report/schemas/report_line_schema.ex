@@ -28,6 +28,13 @@ defmodule GroupCollect.Report.ReportLine do
       :status
     ])
     |> validate_inclusion(:gender, ["male", "female", "other", "prefer not to say"])
+    |> validate_inclusion(:status, [
+      "Fully Paid",
+      "Partially Paid",
+      "Created",
+      "Finished Wizard",
+      "Cancelled"
+    ])
     |> validate_email_format
     |> validate_current_or_future_date(:birthday)
   end

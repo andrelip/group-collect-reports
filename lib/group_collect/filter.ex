@@ -24,8 +24,8 @@ defmodule GroupCollect.Report.Filter do
     query |> where([p], p.gender == ^gender)
   end
 
-  defp apply_filter(query, {:package, gender}) do
-    query |> where([p], p.package == ^gender)
+  defp apply_filter(query, {:package, package}) do
+    query |> where([p], p.package == ^package)
   end
 
   defp apply_filter(query, {:status, status}) do
