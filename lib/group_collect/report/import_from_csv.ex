@@ -29,29 +29,30 @@ defmodule GroupCollect.Report.ImportFromCSV do
   defp insert_validated_data(data) do
     {multi, _} =
       data
-      |> Enum.reduce({Multi.new(), 1}, fn item, {multi, idx} ->
-        item = item |> Map.put_new(:id, item.passenger_id)
-
-        passenger_transaction_id = {:passenger, idx}
-        passenger_list_transaction_id = {:passenger_list, idx}
-
-        multi =
-          multi
-          |> Multi.insert(passenger_transaction_id, PassengerSchema.insert_changeset(item))
-          |> Multi.insert(passenger_list_transaction_id, fn %{
-                                                              ^passenger_transaction_id =>
-                                                                passenger
-                                                            } ->
-            PassengerListSchema.insert_changeset(passenger, item)
-          end)
-
-        {multi, idx + 1}
-      end)
+      |> Enum.reduce({Multi.new(), 1}, &_reduce_multi_operations/2)
 
     case Repo.transaction(multi) do
       {:error, _, changeset, _} -> {:error, changeset}
       any -> any
     end
+  end
+
+  defp _reduce_multi_operations(item, {multi, idx} = _acc) do
+    item = item |> Map.put_new(:id, item.passenger_id)
+
+    passenger_transaction_id = {:passenger, idx}
+    passenger_list_transaction_id = {:passenger_list, idx}
+
+    multi =
+      multi
+      |> Multi.insert(passenger_transaction_id, PassengerSchema.insert_changeset(item))
+      |> Multi.insert(passenger_list_transaction_id, fn %{
+                                                          ^passenger_transaction_id => passenger
+                                                        } ->
+        PassengerListSchema.insert_changeset(passenger, item)
+      end)
+
+    {multi, idx + 1}
   end
 
   defp map_into_changeset(csv_rows) do
