@@ -2,7 +2,7 @@ defmodule GroupCollect.Report do
   @moduledoc """
   Public API for the Report bounded context.
   """
-  alias GroupCollect.Report.ImportCSV
+  alias GroupCollect.Report.CSVParser
   alias GroupCollect.Report.ReportLine
   alias GroupCollect.Report.PassengerSchema
   alias GroupCollect.Report.PassengerListSchema
@@ -10,7 +10,7 @@ defmodule GroupCollect.Report do
   alias Ecto.Multi
 
   def load_from_csv(data) do
-    with {:ok, data} <- ImportCSV.parse(data),
+    with {:ok, data} <- CSVParser.parse(data),
          rows <- map_into_changeset(data),
          {:ok, valid_changesets} <- validate_data(rows) do
       insert_validated_data(valid_changesets)
