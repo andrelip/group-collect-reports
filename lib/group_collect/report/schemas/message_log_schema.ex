@@ -6,7 +6,6 @@ defmodule GroupCollect.Report.MessageLogSchema do
   schema "message_logs" do
     field :body, :string
     field :media, :string
-    field :passenger, :string
     field :subject, :string
     field :passenger_id, :id
 

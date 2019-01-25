@@ -1,12 +1,18 @@
 defmodule GroupCollect.Report.Messaging do
   defstruct [:passenger_id, :media, :subject, :body]
 
+  alias GroupCollect.Report.PassengerSchema
   alias GroupCollect.Report.MessageSchema
   alias GroupCollect.Report.MessageLogSchema
   alias GroupCollect.Report.Messaging.Email
   alias GroupCollect.Repo
+  import Ecto.Query
 
   def send_batch(filter_scope, %__MODULE__{} = params) do
+    from(p in PassengerSchema, join: r in subquery(filter_scope), on: p.id == r.id, select: p)
+    |> Repo.all()
+    |> Enum.map(&{&1, %{params | passenger_id: &1.id}})
+    |> Enum.each(fn {passenger, params} -> __MODULE__.send(passenger, params) end)
   end
 
   def send(passenger, %__MODULE__{media: "email"} = params) do

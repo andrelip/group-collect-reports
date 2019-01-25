@@ -9,6 +9,7 @@ defmodule GroupCollect.Report.MessagingTest do
   alias GroupCollect.Report.PassengerSchema
   alias GroupCollect.Report.MessageSchema
   alias GroupCollect.Report.MessageLogSchema
+  alias GroupCollect.Report.Filter
   alias Ecto.Changeset
 
   @valid_params %Messaging{
@@ -87,25 +88,34 @@ defmodule GroupCollect.Report.MessagingTest do
   end
 
   test "send_batch/1 should send the message to all the users in the filter" do
-    passenger = Repo.get(PassengerSchema, 370)
-    passenger_id = passenger.id
-
-    assert :ok = Messaging.send(passenger, %{@valid_params | media: "internal_message"})
+    scope = Filter.filter(%{status: "Cancelled"})
+    assert :ok == Messaging.send_batch(scope, %{@valid_params | media: "internal_message"})
 
     assert [
-             %MessageLogSchema{
-               passenger_id: 370,
-               subject: "Subject",
+             %GroupCollect.Report.MessageLogSchema{
+               body: "Body",
                media: "internal_message",
-               body: "Body"
+               passenger_id: 385,
+               subject: "Subject"
+             },
+             %GroupCollect.Report.MessageLogSchema{
+               body: "Body",
+               media: "internal_message",
+               passenger_id: 374,
+               subject: "Subject"
              }
            ] = Repo.all(MessageLogSchema)
 
     assert [
-             %MessageSchema{
-               passenger_id: 370,
-               subject: "Subject",
-               body: "Body"
+             %GroupCollect.Report.MessageSchema{
+               body: "Body",
+               passenger_id: 385,
+               subject: "Subject"
+             },
+             %GroupCollect.Report.MessageSchema{
+               body: "Body",
+               passenger_id: 374,
+               subject: "Subject"
              }
            ] = Repo.all(MessageSchema)
   end
