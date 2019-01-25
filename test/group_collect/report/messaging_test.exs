@@ -8,6 +8,7 @@ defmodule GroupCollect.Report.MessagingTest do
   alias GroupCollect.Report.Mailer
   alias GroupCollect.Report.PassengerSchema
   alias GroupCollect.Report.MessageSchema
+  alias GroupCollect.Report.MessageLogSchema
   alias Ecto.Changeset
 
   @valid_params %Messaging{
@@ -49,7 +50,7 @@ defmodule GroupCollect.Report.MessagingTest do
            } = Messaging.deliver(passenger, @valid_params)
   end
 
-  test "send/1 for internal message should write the message to the database" do
+  test "deliver/1 for internal message should write the message to the database" do
     passenger = Repo.get(PassengerSchema, 370)
     passenger_id = passenger.id
 
@@ -59,5 +60,53 @@ defmodule GroupCollect.Report.MessagingTest do
               subject: "Subject",
               body: "Body"
             }} = Messaging.deliver(passenger, %{@valid_params | media: "internal_message"})
+  end
+
+  test "send/1 should send the message and log" do
+    passenger = Repo.get(PassengerSchema, 370)
+    passenger_id = passenger.id
+
+    assert :ok = Messaging.send(passenger, %{@valid_params | media: "internal_message"})
+
+    assert [
+             %MessageLogSchema{
+               passenger_id: 370,
+               subject: "Subject",
+               media: "internal_message",
+               body: "Body"
+             }
+           ] = Repo.all(MessageLogSchema)
+
+    assert [
+             %MessageSchema{
+               passenger_id: 370,
+               subject: "Subject",
+               body: "Body"
+             }
+           ] = Repo.all(MessageSchema)
+  end
+
+  test "send_batch/1 should send the message to all the users in the filter" do
+    passenger = Repo.get(PassengerSchema, 370)
+    passenger_id = passenger.id
+
+    assert :ok = Messaging.send(passenger, %{@valid_params | media: "internal_message"})
+
+    assert [
+             %MessageLogSchema{
+               passenger_id: 370,
+               subject: "Subject",
+               media: "internal_message",
+               body: "Body"
+             }
+           ] = Repo.all(MessageLogSchema)
+
+    assert [
+             %MessageSchema{
+               passenger_id: 370,
+               subject: "Subject",
+               body: "Body"
+             }
+           ] = Repo.all(MessageSchema)
   end
 end

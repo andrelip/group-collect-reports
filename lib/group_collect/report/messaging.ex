@@ -9,7 +9,17 @@ defmodule GroupCollect.Report.Messaging do
   def send_batch(filter_scope, %__MODULE__{} = params) do
   end
 
-  def send(%__MODULE__{media: :email} = params) do
+  def send(passenger, %__MODULE__{media: "email"} = params) do
+    deliver(passenger, params)
+    log_entry(params)
+  end
+
+  def send(passenger, %__MODULE__{media: "internal_message"} = params) do
+    # TODO create a transaction
+    with {:ok, _} <- deliver(passenger, params),
+         {:ok, _} <- log_entry(params) do
+      :ok
+    end
   end
 
   def deliver(passenger, %__MODULE__{media: "email"} = params) do
@@ -30,7 +40,7 @@ defmodule GroupCollect.Report.Messaging do
     |> Repo.insert()
   end
 
-  def log_entry(%__MODULE__{media: "email"} = params) do
+  def log_entry(params) do
     params
     |> Map.from_struct()
     |> MessageLogSchema.insert_changeset()
