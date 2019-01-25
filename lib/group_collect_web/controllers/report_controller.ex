@@ -15,4 +15,17 @@ defmodule GroupCollectWeb.ReportController do
     packages = Report.all_existing_packages()
     render(conn, "index.html", params: params, passengers: passengers, packages: packages)
   end
+
+  @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def show(conn, %{"id" => passenger_id}) do
+    with {:ok, passenger} <- Report.get_passenger(passenger_id),
+         messages <- Report.get_messages(passenger.id) do
+      render(conn, "show.html", passenger: passenger, messages: messages)
+    else
+      {:error, :passenger_not_found} ->
+        conn
+        |> put_flash(:error, "Passenger not found")
+        |> redirect(to: Routes.report_path(conn, :index))
+    end
+  end
 end

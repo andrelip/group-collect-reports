@@ -52,6 +52,12 @@ defmodule GroupCollect.Report.Filter do
     query |> where([p], p.status == ^status)
   end
 
+  defp apply_filter(query, {"passenger_id", nil}), do: query
+
+  defp apply_filter(query, {"passenger_id", passenger_id}) do
+    query |> where([p], p.id == ^passenger_id)
+  end
+
   defp apply_filter(query, {"age", nil}), do: query
 
   defp apply_filter(query, {"age", "above 18"}) do

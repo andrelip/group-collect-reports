@@ -6,3 +6,14 @@
  * Copyright (c) 2017 CJ Patoilo Licensed under the MIT license
  */
 
+#show_message_card {
+  display: inline-block;
+  width: 30rem;
+  margin: 10px;
+}
+
+card-body {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}

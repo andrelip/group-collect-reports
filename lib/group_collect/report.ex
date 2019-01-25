@@ -7,6 +7,7 @@ defmodule GroupCollect.Report do
   alias GroupCollect.Report.Import
   alias GroupCollect.Report.Filter
   alias GroupCollect.Report.ReportRowView
+  alias GroupCollect.Report.MessageLogSchema
   alias GroupCollect.Report.Gate.Message
 
   import Ecto.Query
@@ -29,6 +30,21 @@ defmodule GroupCollect.Report do
 
   def all do
     Repo.all(ReportRowView)
+  end
+
+  def get_passenger(id) do
+    case Repo.get(ReportRowView, id) do
+      nil -> {:error, :passenger_not_found}
+      passenger -> {:ok, passenger}
+    end
+  end
+
+  def get_messages(passenger_id) do
+    from(r in MessageLogSchema,
+      where: r.passenger_id == ^passenger_id,
+      order_by: [desc: r.inserted_at]
+    )
+    |> Repo.all()
   end
 
   def filter_passengers(params) do

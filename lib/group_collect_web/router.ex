@@ -18,6 +18,7 @@ defmodule GroupCollectWeb.Router do
 
     # get "/", PageController, :index
     get "/", ReportController, :index
+    get "/passenger/:id", ReportController, :show
     get "/insert_csv", Report.ImportController, :new
     post "/insert_csv", Report.ImportController, :post
     get "/message", Report.MessageController, :new

@@ -20,8 +20,8 @@
   <tbody>
     <%= for passenger <- @passengers do %>
     <tr>
-      <th scope="row"><%= passenger.id %></th>
-      <td><%= passenger.full_name %></td>
+      <td><%= link passenger.id, to: Routes.report_path(@conn, :show, passenger) %></td>
+      <td><%= link passenger.full_name, to: Routes.report_path(@conn, :show, passenger) %></td>
       <td><%= gender(passenger) %></td>
       <td><%= format_date(passenger.birthday) %></td>
       <td><%= passenger.package %></td>
