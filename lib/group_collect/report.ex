@@ -2,7 +2,9 @@ defmodule GroupCollect.Report do
   @moduledoc """
   Public API for the Report bounded context.
   """
+  alias GroupCollect.Repo
   alias GroupCollect.Report.Import
+  alias GroupCollect.Report.ReportRowView
 
   @doc """
   Receives the content of a CSV file and tries to insert the data into
@@ -12,4 +14,8 @@ defmodule GroupCollect.Report do
           {:ok, %{optional(Import.multi_operation_key()) => Import.passenger()}}
           | {:error, any()}
   defdelegate from_csv(data), to: Import
+
+  def all do
+    Repo.all(ReportRowView)
+  end
 end

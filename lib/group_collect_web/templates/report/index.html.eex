@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Package</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for passenger <- @passengers do %>
+    <tr>
+      <th scope="row"><%= passenger.id %></th>
+      <td><%= passenger.full_name %></td>
+      <td><%= passenger.package %></td>
+      <td><%= passenger.status %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
