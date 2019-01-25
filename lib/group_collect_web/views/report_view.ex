@@ -9,6 +9,10 @@ defmodule GroupCollectWeb.ReportView do
     String.capitalize(passenger.gender)
   end
 
+  def capitalize(text) do
+    String.capitalize(text)
+  end
+
   def add_filter(conn, params, key, gender) do
     Routes.report_path(conn, :index, Map.put(params, key, gender))
   end

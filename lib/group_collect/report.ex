@@ -33,4 +33,9 @@ defmodule GroupCollect.Report do
     Filter.filter(params)
     |> Repo.all()
   end
+
+  def all_existing_packages() do
+    from(p in ReportRowView, order_by: [asc: p.package], distinct: p.package, select: p.package)
+    |> Repo.all()
+  end
 end

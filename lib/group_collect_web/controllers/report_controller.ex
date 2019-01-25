@@ -11,6 +11,7 @@ defmodule GroupCollectWeb.ReportController do
 
   defp _index(conn, params) do
     passengers = Report.filter_passengers(params)
-    render(conn, "index.html", passengers: passengers, params: params)
+    packages = Report.all_existing_packages()
+    render(conn, "index.html", params: params, passengers: passengers, packages: packages)
   end
 end
