@@ -16,8 +16,8 @@ defmodule GroupCollect.Report.FilterTest do
   end
 
   test "should filter by genre" do
-    male_query = Filter.filter(%{gender: "male"})
-    female_query = Filter.filter(%{gender: "female"})
+    male_query = Filter.filter(%{"gender" => "male"})
+    female_query = Filter.filter(%{"gender" => "female"})
     assert 6 == Repo.aggregate(male_query, :count, :id)
 
     assert ["male"] ==
@@ -30,8 +30,8 @@ defmodule GroupCollect.Report.FilterTest do
   end
 
   test "should filter by age" do
-    above18_query = Filter.filter(%{age: "above 18"})
-    under18_query = Filter.filter(%{age: "under 18"})
+    above18_query = Filter.filter(%{"age" => "above 18"})
+    under18_query = Filter.filter(%{"age" => "under 18"})
     assert 4 == Repo.aggregate(above18_query, :count, :id)
 
     assert [38, 32, 32, 19] ==
@@ -52,7 +52,7 @@ defmodule GroupCollect.Report.FilterTest do
   test "should filter by status" do
     ["Fully Paid", "Partially Paid", "Created", "Finished Wizard", "Cancelled"]
     |> Enum.each(fn status ->
-      query = Filter.filter(%{status: status})
+      query = Filter.filter(%{"status" => status})
       assert [status] == query |> distinct([r], r.status) |> select([r], r.status) |> Repo.all()
     end)
   end
@@ -60,7 +60,7 @@ defmodule GroupCollect.Report.FilterTest do
   test "should filter by package" do
     ["Basic Package", "Presidential Package", "Basic Package", "Basic Package", "Senator Package"]
     |> Enum.each(fn package ->
-      query = Filter.filter(%{package: package})
+      query = Filter.filter(%{"package" => package})
 
       assert [package] ==
                query |> distinct([r], r.package) |> select([r], r.package) |> Repo.all()

@@ -85,7 +85,7 @@ defmodule GroupCollect.Report.MessagingTest do
   end
 
   test "send_batch/1 should send the message to all the users in the filter" do
-    scope = Filter.filter(%{status: "Cancelled"})
+    scope = Filter.filter(%{"status" => "Cancelled"})
     assert :ok == Messaging.send_batch(scope, %{@valid_params | media: "internal_message"})
 
     assert [

@@ -20,7 +20,7 @@ defmodule GroupCollect.AnalyzeTest do
              %{"Partially Paid" => 6},
              %{"Created" => 3},
              %{"Cancelled" => 2}
-           ] = Analyze.summarize_by_statuses()
+           ] == Analyze.summarize_by_statuses()
   end
 
   test "summarize_by_package_for_paid_passengers/1 should display grouped data with proper count" do
