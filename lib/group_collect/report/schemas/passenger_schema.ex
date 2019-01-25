@@ -1,6 +1,8 @@
 defmodule GroupCollect.Report.PassengerSchema do
   @moduledoc false
 
+  alias GroupCollect.Repo
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -13,8 +15,15 @@ defmodule GroupCollect.Report.PassengerSchema do
     timestamps()
   end
 
+  def find_or_update_changeset(attrs) do
+    case Repo.get(__MODULE__, attrs[:passenger_id]) do
+      nil -> insert_changeset(attrs)
+      passenger -> update_changeset(passenger, attrs)
+    end
+  end
+
   @doc false
-  def changeset(passenger, attrs) do
+  def update_changeset(passenger, attrs) do
     passenger
     |> cast(attrs, [:full_name, :gender, :email, :birthday])
     |> validate_required([:full_name, :gender, :email, :birthday])

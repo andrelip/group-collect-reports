@@ -6,6 +6,7 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
 
   alias GroupCollect.Report.Import
   @csv File.read!("test/support/fixtures/files/passenger_statuses.csv")
+  @csv_for_update File.read!("test/support/fixtures/files/passenger_statuses_for_update.csv")
   @csv_with_duplicated_entries File.read!(
                                  "test/support/fixtures/files/passenger_with_duplicated_id.csv"
                                )
@@ -27,16 +28,22 @@ defmodule GroupCollect.Report.ImportFromCSVTest do
              } = first_passenger
     end
 
-    test "should raise an error for duplicated passengers" do
-      assert {:error, changeset} = Import.from_csv(@csv_with_duplicated_entries)
+    test "should update passengers" do
+      assert {:ok, _} = Import.from_csv(@csv)
+      assert {:ok, _} = Import.from_csv(@csv_for_update)
 
-      assert changeset.errors == [
-               id:
-                 {"has already been taken",
-                  [constraint: :unique, constraint_name: "passengers_pkey"]}
-             ]
+      assert %GroupCollect.Report.PassengerSchema{
+               full_name: "Updated User Name"
+             } = Repo.get(PassengerSchema, 370)
 
-      assert 0 == Repo.aggregate(PassengerSchema, :count, :id)
+      assert %GroupCollect.Report.PassengerListSchema{
+               status: "Cancelled"
+             } = Repo.get_by(PassengerListSchema, %{passenger_id: 370})
+    end
+
+    test "should invalidate csv with duplicated passenger_id" do
+      assert {:error, %{duplicated_entries: ["370"]}} ==
+               Import.from_csv(@csv_with_duplicated_entries)
     end
 
     test "should insert passenger into the respective list" do

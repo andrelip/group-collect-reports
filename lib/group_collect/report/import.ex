@@ -20,9 +20,34 @@ defmodule GroupCollect.Report.Import do
   @spec from_csv(binary()) ::
           {:ok, %{optional(multi_operation_key) => passenger}} | {:error, any()}
   def from_csv(csv_content) do
-    with {:ok, data} <- CSVParser.parse(csv_content) do
+    with {:ok, data} <- CSVParser.parse(csv_content),
+         :ok <- verify_duplicated(data) do
       load(data)
     end
+  end
+
+  defp verify_duplicated(data) do
+    duplicates =
+      data
+      |> Enum.map(& &1.passenger_id)
+      |> Enum.group_by(& &1)
+      |> Enum.map(fn {id, matches} ->
+        case length(matches) do
+          1 -> nil
+          match -> id
+        end
+      end)
+      |> Enum.filter(&(&1 != nil))
+
+    case duplicates do
+      [] -> :ok
+      _ -> {:error, %{duplicated_entries: duplicates}}
+    end
+
+    # case length(data) == Enum.uniq(data, & &1.passenger_id) |> length() do
+    #   true -> :ok
+    #   false -> {:error, "oi"}
+    # end
   end
 
   defp load(data) do
@@ -51,11 +76,15 @@ defmodule GroupCollect.Report.Import do
 
     multi =
       multi
-      |> Multi.insert(passenger_transaction_id, PassengerSchema.insert_changeset(item))
-      |> Multi.insert(passenger_list_transaction_id, fn %{
-                                                          ^passenger_transaction_id => passenger
-                                                        } ->
-        PassengerListSchema.insert_changeset(passenger, item)
+      |> Multi.insert_or_update(
+        passenger_transaction_id,
+        PassengerSchema.find_or_update_changeset(item)
+      )
+      |> Multi.insert_or_update(passenger_list_transaction_id, fn %{
+                                                                    ^passenger_transaction_id =>
+                                                                      passenger
+                                                                  } ->
+        PassengerListSchema.find_or_update_changeset(passenger, item)
       end)
 
     {multi, idx + 1}

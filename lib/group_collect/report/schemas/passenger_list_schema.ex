@@ -4,6 +4,8 @@ defmodule GroupCollect.Report.PassengerListSchema do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias GroupCollect.Repo
+
   schema "passenger_lists" do
     field :package, :string
     field :status, :string
@@ -13,7 +15,15 @@ defmodule GroupCollect.Report.PassengerListSchema do
   end
 
   @doc false
-  def changeset(passenger_list, attrs) do
+  def find_or_update_changeset(passenger, attrs) do
+    case Repo.get_by(__MODULE__, %{passenger_id: passenger.id}) do
+      nil -> insert_changeset(passenger, attrs)
+      passenger_list -> update_changeset(passenger_list, attrs)
+    end
+  end
+
+  @doc false
+  def update_changeset(passenger_list, attrs) do
     passenger_list
     |> cast(attrs, [:package, :status])
     |> validate_required([:package, :status])
