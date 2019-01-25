@@ -64,5 +64,7 @@ defmodule GroupCollect.Report.Filter do
     query |> where([p], p.birthday > ^start_date)
   end
 
+  defp apply_filter(query, _), do: query
+
   defp apply_filter(query, {:age, _}), do: query
 end

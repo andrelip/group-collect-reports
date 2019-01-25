@@ -1,6 +1,7 @@
 defmodule GroupCollectWeb.ReportController do
   use GroupCollectWeb, :controller
   alias GroupCollect.Report
+  plug :put_layout, "report.html"
 
   def index(conn, params) do
     case Report.has_any_row() do

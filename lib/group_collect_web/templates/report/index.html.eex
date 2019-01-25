@@ -29,4 +29,6 @@
     </tr>
     <% end %>
   </tbody>
+
+  <%= link("Send message to the displayed users", to: Routes.message_path(@conn, :new, @params), class: "btn btn-link") %>
 </table>

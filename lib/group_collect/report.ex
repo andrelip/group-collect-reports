@@ -2,10 +2,12 @@ defmodule GroupCollect.Report do
   @moduledoc """
   Public API for the Report bounded context.
   """
+  alias Ecto.Changeset
   alias GroupCollect.Repo
   alias GroupCollect.Report.Import
   alias GroupCollect.Report.Filter
   alias GroupCollect.Report.ReportRowView
+  alias GroupCollect.Report.Gate.Message
 
   import Ecto.Query
 
@@ -34,8 +36,25 @@ defmodule GroupCollect.Report do
     |> Repo.all()
   end
 
+  def filter_passengers_query(params) do
+    Filter.filter(params)
+  end
+
   def all_existing_packages() do
     from(p in ReportRowView, order_by: [asc: p.package], distinct: p.package, select: p.package)
     |> Repo.all()
+  end
+
+  def change_message(%Message{} = message) do
+    Message.changeset(message, %{})
+  end
+
+  def verify_message(params) do
+    changeset = Message.changeset(%Message{}, params)
+
+    case changeset.valid? do
+      false -> {:error, changeset}
+      true -> {:ok, Changeset.apply_changes(changeset)}
+    end
   end
 end

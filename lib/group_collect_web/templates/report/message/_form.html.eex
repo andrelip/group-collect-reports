@@ -1,0 +1,21 @@
+<%= form_for @changeset, Routes.message_path(@conn, :create, @params), [class: "form-group"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Cannot send the messages. Please verify the the errors bellow:</p>
+    </div>
+  <% end %>
+
+  <%= label f, :subject %>
+  <%= text_input f, :subject, class: "form-control", placeholder: "Enter the subject" %>
+  <%= error_tag f, :subject %>
+
+  <%= label f, :body %>
+  <%= textarea f, :body, class: "form-control", rows: 10, placeholder: "Enter the body" %>
+  <%= error_tag f, :body %>
+
+  <%= label f, :media %>
+  <%= select(f, :media, ["Email": "email", "Internal Message": "internal_message"], class: "form-control")%>
+  
+  <%= submit "Save" %>
+  </div>
+<% end %>
