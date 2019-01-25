@@ -1,7 +1,7 @@
-defmodule GroupCollect.Report.ImportCSVTest do
+defmodule GroupCollect.Report.CSVParserTest do
   use GroupCollect.DataCase
 
-  alias GroupCollect.Report.ImportCSV
+  alias GroupCollect.Report.CSVParser
   alias GroupCollect.Report.ReportRow
 
   @valid_comma_csv "Passenger ID,Full Name,Gender,Email,Package,Date of Birth,Status\n370,Jeff Rustic,male,jeffrustic@gmail.com,Basic Package,2006-02-14,Fully Paid"
@@ -11,11 +11,11 @@ defmodule GroupCollect.Report.ImportCSVTest do
 
   describe "CommaCSV" do
     test "validate_header/1 should return true when csv have all the valid values" do
-      assert true == ImportCSV.validate_header(@valid_comma_csv)
+      assert true == CSVParser.validate_header(@valid_comma_csv)
     end
 
     test "validate_header/1 should return false for missing keys" do
-      assert false == ImportCSV.validate_header(@invalid_comma_csv)
+      assert false == CSVParser.validate_header(@invalid_comma_csv)
     end
 
     test "parse_valid/1 should convert the csv a map no matter the order" do
@@ -31,10 +31,10 @@ defmodule GroupCollect.Report.ImportCSVTest do
         }
       ]
 
-      assert {:ok, right_map} == ImportCSV.parse(@valid_comma_csv)
-      assert {:ok, right_map} == ImportCSV.parse(@valid_out_or_order_comma_csv)
-      assert {:error, _} = ImportCSV.parse(@invalid_comma_csv)
-      assert {:error, _} = ImportCSV.parse(@tabulated_csv)
+      assert {:ok, right_map} == CSVParser.parse(@valid_comma_csv)
+      assert {:ok, right_map} == CSVParser.parse(@valid_out_or_order_comma_csv)
+      assert {:error, _} = CSVParser.parse(@invalid_comma_csv)
+      assert {:error, _} = CSVParser.parse(@tabulated_csv)
     end
   end
 
@@ -59,6 +59,6 @@ defmodule GroupCollect.Report.ImportCSVTest do
       :status => "Fully Paid"
     }
 
-    assert output == input |> ImportCSV.format_map()
+    assert output == input |> CSVParser.format_map()
   end
 end

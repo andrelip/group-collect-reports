@@ -1,4 +1,4 @@
-defmodule GroupCollect.Report.ImportCSV do
+defmodule GroupCollect.Report.CSVParser do
   @moduledoc """
   Parse the GroupCollect CSV containing the status of many passengers.
 
