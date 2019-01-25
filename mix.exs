@@ -20,7 +20,7 @@ defmodule GroupCollect.MixProject do
   def application do
     [
       mod: {GroupCollect.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo]
     ]
   end
 
@@ -47,7 +47,8 @@ defmodule GroupCollect.MixProject do
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:nimble_csv, "~> 0.3"},
-      {:timex, "~> 3.1"}
+      {:timex, "~> 3.1"},
+      {:bamboo, "~> 1.1"}
     ]
   end
 
