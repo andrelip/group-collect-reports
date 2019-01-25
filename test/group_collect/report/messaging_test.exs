@@ -5,12 +5,10 @@ defmodule GroupCollect.Report.MessagingTest do
   use GroupCollect.DataCase
   alias GroupCollect.Report.Messaging
   alias GroupCollect.Report.Import
-  alias GroupCollect.Report.Mailer
   alias GroupCollect.Report.PassengerSchema
   alias GroupCollect.Report.MessageSchema
   alias GroupCollect.Report.MessageLogSchema
   alias GroupCollect.Report.Filter
-  alias Ecto.Changeset
 
   @valid_params %Messaging{
     passenger_id: 370,
@@ -65,7 +63,6 @@ defmodule GroupCollect.Report.MessagingTest do
 
   test "send/1 should send the message and log" do
     passenger = Repo.get(PassengerSchema, 370)
-    passenger_id = passenger.id
 
     assert :ok = Messaging.send(passenger, %{@valid_params | media: "internal_message"})
 

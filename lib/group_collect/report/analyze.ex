@@ -14,7 +14,7 @@ defmodule GroupCollect.Analyze do
     |> Repo.all()
   end
 
-  def summarize_by_package_for_paid_passengers(wizard: wizard) do
+  def summarize_by_package_for_paid_passengers(include_wizard: wizard) do
     case wizard do
       false ->
         from(r in ReportRowView,

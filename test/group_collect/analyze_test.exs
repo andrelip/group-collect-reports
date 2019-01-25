@@ -28,12 +28,12 @@ defmodule GroupCollect.AnalyzeTest do
              %{"Basic Package" => 2},
              %{"Presidential Package" => 3},
              %{"Senator Package" => 4}
-           ] = Analyze.summarize_by_package_for_paid_passengers(wizard: false)
+           ] = Analyze.summarize_by_package_for_paid_passengers(include_wizard: false)
 
     assert [
              %{"Basic Package" => 3},
              %{"Presidential Package" => 4},
              %{"Senator Package" => 6}
-           ] = Analyze.summarize_by_package_for_paid_passengers(wizard: true)
+           ] = Analyze.summarize_by_package_for_paid_passengers(include_wizard: true)
   end
 end
