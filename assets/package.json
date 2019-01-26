@@ -13,6 +13,7 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0",
+    "chart.js": "^2.7.3",
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^0.28.10",
     "mini-css-extract-plugin": "^0.4.0",

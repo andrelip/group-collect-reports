@@ -1,11 +1,17 @@
-<table class="table">
+<div class="row">
+  <%= render GroupCollectWeb.ReportView, "_gender_dropdown.html", assigns%>
+  <%= render GroupCollectWeb.ReportView, "_age_dropdown.html", assigns%>
+  <%= render GroupCollectWeb.ReportView, "_package_dropdown.html", assigns%>
+</div class="row">
 
-  <div class="row">
-    <%= render GroupCollectWeb.ReportView, "_gender_dropdown.html", assigns%>
-    <%= render GroupCollectWeb.ReportView, "_age_dropdown.html", assigns%>
-    <%= render GroupCollectWeb.ReportView, "_package_dropdown.html", assigns%>
-  </div class="row">
-  
+<script>
+  window.columns = JSON.parse('<%= raw @graph_labels %>');
+  window.data = JSON.parse('<%= raw @graph_values %>');
+</script>
+
+<canvas id="myChart"></canvas>
+
+<table class="table">
   <thead>
     <tr>  
       <th scope="col">#</th>

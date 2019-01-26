@@ -23,6 +23,7 @@ defmodule GroupCollectWeb.Router do
     post "/insert_csv", Report.ImportController, :post
     get "/message", Report.MessageController, :new
     post "/message", Report.MessageController, :create
+    get "/graphs/package", Report.ChartController, :package
   end
 
   # Other scopes may use custom stacks.

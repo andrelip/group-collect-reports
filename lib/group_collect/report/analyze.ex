@@ -16,6 +16,18 @@ defmodule GroupCollect.Analyze do
     |> Enum.into(%{})
   end
 
+  def summarize_by_statuses(filter) do
+    from(r in filter,
+      group_by: r.status,
+      select: {
+        r.status,
+        count(r.status)
+      }
+    )
+    |> Repo.all()
+    |> Enum.into(%{})
+  end
+
   def summarize_by_package_for_paid_passengers(include_wizard: wizard) do
     case wizard do
       false ->
