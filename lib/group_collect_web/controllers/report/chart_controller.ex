@@ -3,10 +3,18 @@ defmodule GroupCollectWeb.Report.ChartController do
   alias GroupCollect.Report.Analyze
   plug :put_layout, "report.html"
 
-  def package(conn, _params) do
-    {graph_labels, graph_values} =
-      Analyze.summarize_by_package_for_paid_passengers(include_wizard: false) |> Enum.unzip()
+  def package(conn, params) do
+    include_wizard = params["include_wizard"] == "true"
+    IO.inspect(include_wizard)
 
-    render(conn, "package.html", graph_labels: graph_labels, graph_values: graph_values)
+    {graph_labels, graph_values} =
+      Analyze.summarize_by_package_for_paid_passengers(include_wizard: include_wizard)
+      |> Enum.unzip()
+
+    render(conn, "package.html",
+      params: params,
+      graph_labels: graph_labels,
+      graph_values: graph_values
+    )
   end
 end

@@ -1,3 +1,7 @@
+
+<div style="float: right;">
+<input type="checkbox" id="includeWizard" name="subscribe" value="newsletter" <%= include_wizard_check(@params) %> > Include Wizard
+</div>
 <canvas id="myChart"></canvas>
 <script>
     var columns = <%= raw Poison.encode!(@graph_labels) %>

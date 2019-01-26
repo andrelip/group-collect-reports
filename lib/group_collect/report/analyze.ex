@@ -44,8 +44,8 @@ defmodule GroupCollect.Report.Analyze do
   opts:
   include_wizard -> also counts the users that completed the wizard
   """
-  def summarize_by_package_for_paid_passengers(include_wizard: wizard) do
-    case wizard do
+  def summarize_by_package_for_paid_passengers(params \\ []) do
+    case params[:include_wizard] do
       false ->
         from(r in ReportRowView,
           where: r.status == "Fully Paid" or r.status == "Partially Paid",
