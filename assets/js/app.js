@@ -27,7 +27,7 @@ $(document).ready(function(evt) {
       window.location.href =
         "http://localhost:4000/graphs/package?include_wizard=true";
     } else {
-      window.location.href = "http://localhost:4000/graphs/package";
+      window.location.href = "/graphs/package?include_wizard=true";
     }
   });
 });
