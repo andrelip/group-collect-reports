@@ -24,10 +24,9 @@ $(document).ready(function(evt) {
   $("#includeWizard").on("click", function(e) {
     let cb_checked = $("#includeWizard").prop("checked");
     if (cb_checked) {
-      window.location.href =
-        "http://localhost:4000/graphs/package?include_wizard=true";
-    } else {
       window.location.href = "/graphs/package?include_wizard=true";
+    } else {
+      window.location.href = "/graphs/package";
     }
   });
 });
