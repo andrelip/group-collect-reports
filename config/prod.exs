@@ -12,7 +12,9 @@ use Mix.Config
 config :group_collect, GroupCollectWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  root: "."
 
 # Do not print debug messages in production
 config :logger, level: :info
