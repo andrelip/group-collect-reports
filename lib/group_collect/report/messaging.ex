@@ -35,7 +35,8 @@ defmodule GroupCollect.Report.Messaging do
       to: passenger.email
     }
 
-    Email.send_generic(email_params)
+    email_params
+    |> Email.send_generic()
     |> GroupCollect.Mailer.deliver_now()
   end
 

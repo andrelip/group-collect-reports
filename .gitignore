@@ -43,3 +43,4 @@ npm-debug.log
 .elixir_ls
 /config/dev.exs
 /config/test.exs
+docker-compose.yml

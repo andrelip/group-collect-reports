@@ -16,7 +16,14 @@ defmodule GroupCollectWeb.Router do
   scope "/", GroupCollectWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
+    get "/", ReportController, :index
+    get "/passenger/:id", ReportController, :show
+    get "/insert_csv", Report.ImportController, :new
+    post "/insert_csv", Report.ImportController, :post
+    get "/message", Report.MessageController, :new
+    post "/message", Report.MessageController, :create
+    get "/graphs/package", Report.ChartController, :package
   end
 
   # Other scopes may use custom stacks.

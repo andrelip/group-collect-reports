@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light"  style="margin-bottom: 40px;">
+  <a class="navbar-brand" href="#">Report</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+       <%= link "Home", to: Routes.report_path(@conn, :index), class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link "Update Data", to: Routes.import_path(@conn, :new), class: "nav-link" %>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Charts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <%= link "Packages", to: Routes.chart_path(@conn, :package), class: "dropdown-item"%>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

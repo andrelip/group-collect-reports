@@ -1,0 +1,15 @@
+docker-compose.yml
+.git
+_build
+assets/node_modules
+priv/static/
+deps
+.elixir_ls/**/*
+frontend/node_modules
+config/dev.exs
+config/prod.exs
+assets/node_modules
+frontend/node_modules
+deps/
+tmp
+cover/

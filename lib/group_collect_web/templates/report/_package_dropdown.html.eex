@@ -1,0 +1,14 @@
+    <div class="col">
+      <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= @params["package"] || "Package" %>
+        </a>
+        
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <%= for package <- @packages do %>
+            <a class="dropdown-item <%= show_active_tag(@conn, @params, "package", package) %>" href="<%= add_filter(@conn, @params, "package", package) %>"><%= capitalize(package) %></a>
+          <% end %>
+          <a class="dropdown-item " href="<%= remove_filter(@conn, @params, "package") %>">All</a>
+        </div>
+      </div>
+    </div>

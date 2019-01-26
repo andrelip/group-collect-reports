@@ -1,0 +1,5 @@
+<canvas id="myChart"></canvas>
+<script>
+    var columns = <%= raw Poison.encode!(@graph_labels) %>
+    var data = <%= raw Poison.encode!(@graph_values) %>
+</script>

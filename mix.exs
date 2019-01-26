@@ -48,7 +48,8 @@ defmodule GroupCollect.MixProject do
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:nimble_csv, "~> 0.3"},
       {:timex, "~> 3.1"},
-      {:bamboo, "~> 1.1"}
+      {:bamboo, "~> 1.1"},
+      {:distillery, "~> 2.0"}
     ]
   end
 

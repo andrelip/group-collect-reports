@@ -1,0 +1,23 @@
+<div class="jumbotron">
+  <h1 class="display-4"><%= @passenger.full_name %></h1>
+  <p class="lead"><%= @passenger.package %></p>
+  <p class="lead">Status: <%= raw status(@passenger) %></p>
+  <p class="lead"><%= @passenger.email %></p>
+  <p class="lead">Genre: <%= @passenger.gender %></p>
+  <p class="lead">Birthday: <%= format_date(@passenger.birthday) %></p>
+  <hr class="my-4">
+  <td><%= render_redirect_message(@conn, @passenger) %></td>
+</div>
+
+  <hr class="my-4">
+  <p>Messages History    </p>
+
+<%= for message <- @messages do %>
+    <div class="card" id="show_message_card">
+    <div class="card-body">
+        <h5 class="card-title"><%= message.subject %></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><%= raw media(message ) %> <%= format_time(message.inserted_at) %></h6>
+        <p class="card-text"><%= message.body %></p>
+    </div>
+    </div>
+<% end %>

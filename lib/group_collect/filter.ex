@@ -34,27 +34,43 @@ defmodule GroupCollect.Report.Filter do
     end)
   end
 
-  defp apply_filter(query, {:gender, gender}) do
+  defp apply_filter(query, {"gender", nil}), do: query
+
+  defp apply_filter(query, {"gender", gender}) do
     query |> where([p], p.gender == ^gender)
   end
 
-  defp apply_filter(query, {:package, package}) do
+  defp apply_filter(query, {"package", nil}), do: query
+
+  defp apply_filter(query, {"package", package}) do
     query |> where([p], p.package == ^package)
   end
 
-  defp apply_filter(query, {:status, status}) do
+  defp apply_filter(query, {"status", nil}), do: query
+
+  defp apply_filter(query, {"status", status}) do
     query |> where([p], p.status == ^status)
   end
 
-  defp apply_filter(query, {:age, "above 18"}) do
+  defp apply_filter(query, {"passenger_id", nil}), do: query
+
+  defp apply_filter(query, {"passenger_id", passenger_id}) do
+    query |> where([p], p.id == ^passenger_id)
+  end
+
+  defp apply_filter(query, {"age", nil}), do: query
+
+  defp apply_filter(query, {"age", "above 18"}) do
     start_date = Timex.now() |> Timex.shift(years: -18)
     query |> where([p], p.birthday <= ^start_date)
   end
 
-  defp apply_filter(query, {:age, "under 18"}) do
+  defp apply_filter(query, {"age", "under 18"}) do
     start_date = Timex.now() |> Timex.shift(years: -18)
     query |> where([p], p.birthday > ^start_date)
   end
+
+  defp apply_filter(query, _), do: query
 
   defp apply_filter(query, {:age, _}), do: query
 end

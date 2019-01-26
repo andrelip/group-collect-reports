@@ -1,0 +1,13 @@
+    <div class="col">
+      <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= @params["age"] || "Age" %>
+        </a>
+        
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item <%= show_active_tag(@conn, @params, "age", "above 18") %>" href="<%= add_filter(@conn, @params, "age", "above 18") %>">Above 18</a>
+          <a class="dropdown-item <%= show_active_tag(@conn, @params, "age", "under 18") %>" href="<%= add_filter(@conn, @params, "age", "under 18") %>">Under 18</a>
+          <a class="dropdown-item " href="<%= remove_filter(@conn, @params, "age") %>">All</a>
+        </div>
+      </div>
+    </div>

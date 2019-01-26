@@ -1,0 +1,3 @@
+<h1>Send Message</h1>
+
+<%= render GroupCollectWeb.Report.MessageView, "_form.html", assigns %>

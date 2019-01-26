@@ -11,11 +11,12 @@ defmodule GroupCollect.Report.CSVParserTest do
 
   describe "CommaCSV" do
     test "validate_header/1 should return true when csv have all the valid values" do
-      assert true == CSVParser.validate_header(@valid_comma_csv)
+      assert :ok == CSVParser.validate_header(@valid_comma_csv)
     end
 
     test "validate_header/1 should return false for missing keys" do
-      assert false == CSVParser.validate_header(@invalid_comma_csv)
+      assert {:error, ["Gender", "Email", "Package", "Date of Birth", "Status"]} ==
+               CSVParser.validate_header(@invalid_comma_csv)
     end
 
     test "parse_valid/1 should convert the csv a map no matter the order" do

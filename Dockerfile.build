@@ -1,0 +1,27 @@
+FROM elixir:1.8.0
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/opt/app/ TERM=xterm
+# Install Hex+Rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && \
+    apt-get install nodejs yarn -y -q && \
+    apt-get install nodejs -y -q && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+WORKDIR /home/app
+ENV MIX_ENV=prod
+
+# Cache elixir deps
+ADD mix.exs ./
+ADD config ./config
+ADD ./docker/scripts/prepare-build.sh ./prepare-build.sh
+ADD docker/prod.exs.distillery config/prod.exs
+RUN chmod +x prepare-build.sh
+ADD . .
+EXPOSE 5000
+CMD ["./prepare-build.sh"]

@@ -1,0 +1,40 @@
+<div class="row">
+  <%= render GroupCollectWeb.ReportView, "_gender_dropdown.html", assigns%>
+  <%= render GroupCollectWeb.ReportView, "_age_dropdown.html", assigns%>
+  <%= render GroupCollectWeb.ReportView, "_package_dropdown.html", assigns%>
+</div class="row">
+
+<script>
+  window.columns = JSON.parse('<%= raw @graph_labels %>');
+  window.data = JSON.parse('<%= raw @graph_values %>');
+</script>
+
+<canvas id="myChart"></canvas>
+
+<table class="table">
+  <thead>
+    <tr>  
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Gender</th>
+      <th scope="col">Birthday</th>
+      <th scope="col">Package</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <%= for passenger <- @passengers do %>
+    <tr>
+      <td><%= link passenger.id, to: Routes.report_path(@conn, :show, passenger) %></td>
+      <td><%= link passenger.full_name, to: Routes.report_path(@conn, :show, passenger) %></td>
+      <td><%= gender(passenger) %></td>
+      <td><%= format_date(passenger.birthday) %></td>
+      <td><%= passenger.package %></td>
+      <td><%= passenger.status %></td>
+    </tr>
+    <% end %>
+  </tbody>
+
+  <%= link("Send message to the displayed users", to: Routes.message_path(@conn, :new, @params), class: "btn btn-link") %>
+</table>
