@@ -48,7 +48,8 @@ defmodule GroupCollect.Report do
   end
 
   def filter_passengers(params) do
-    Filter.filter(params)
+    params
+    |> Filter.filter()
     |> Repo.all()
   end
 

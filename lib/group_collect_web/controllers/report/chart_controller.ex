@@ -1,7 +1,6 @@
 defmodule GroupCollectWeb.Report.ChartController do
   use GroupCollectWeb, :controller
-  alias GroupCollect.Report
-  alias GroupCollect.Analyze
+  alias GroupCollect.Report.Analyze
   plug :put_layout, "report.html"
 
   def package(conn, _params) do

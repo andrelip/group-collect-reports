@@ -6,7 +6,7 @@
         
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <%= for package <- @packages do %>
-            <a class="dropdown-item <%= show_active_tag(@conn, @params, "package", package) %>" href="<%= add_filter(@conn, @params, "package", package) %>"><%= capitalize(package) %></a>
+            <a class="dropdown-item <%= show_active_tag(@params, "package", package) %>" href="<%= add_filter(@conn, @params, "package", package) %>"><%= capitalize(package) %></a>
           <% end %>
           <a class="dropdown-item " href="<%= remove_filter(@conn, @params, "package") %>">All</a>
         </div>

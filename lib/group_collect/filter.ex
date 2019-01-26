@@ -71,6 +71,4 @@ defmodule GroupCollect.Report.Filter do
   end
 
   defp apply_filter(query, _), do: query
-
-  defp apply_filter(query, {:age, _}), do: query
 end

@@ -14,7 +14,7 @@ defmodule GroupCollect.DBView do
     rescue
       e in Postgrex.Error ->
         Logger.warn("create_view_from_query/2 failed. #{e.postgres.message} (#{e.postgres.code})")
-        raise e
+        reraise e, __STACKTRACE__
     end
   end
 

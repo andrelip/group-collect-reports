@@ -25,7 +25,7 @@ defmodule GroupCollectWeb.ReportView do
     Routes.report_path(conn, :index, Map.delete(params, key))
   end
 
-  def show_active_tag(conn, params, key, desired_value) do
+  def show_active_tag(params, key, desired_value) do
     case params[key] do
       nil ->
         nil

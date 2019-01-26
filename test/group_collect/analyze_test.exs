@@ -1,10 +1,10 @@
-defmodule GroupCollect.AnalyzeTest do
+defmodule GroupCollect.Report.AnalyzeTest do
   @moduledoc """
   All the tests are based on the csv fixture"
   """
   use GroupCollect.DataCase
 
-  alias GroupCollect.Analyze
+  alias GroupCollect.Report.Analyze
   alias GroupCollect.Report.Import
 
   @csv File.read!("test/support/fixtures/files/passenger_statuses.csv")

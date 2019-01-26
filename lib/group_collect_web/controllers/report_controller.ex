@@ -1,7 +1,7 @@
 defmodule GroupCollectWeb.ReportController do
   use GroupCollectWeb, :controller
   alias GroupCollect.Report
-  alias GroupCollect.Analyze
+  alias GroupCollect.Report.Analyze
   plug :put_layout, "report.html"
 
   def index(conn, params) do
@@ -15,7 +15,9 @@ defmodule GroupCollectWeb.ReportController do
     passengers = Report.filter_passengers(params)
     passengers_query = Report.filter_passengers_query(params)
     packages = Report.all_existing_packages()
-    {graph_labels, graph_values} = Analyze.summarize_by_statuses(passengers_query) |> Enum.unzip()
+
+    {graph_labels, graph_values} =
+      passengers_query |> Analyze.summarize_by_statuses() |> Enum.unzip()
 
     render(conn, "index.html",
       params: params,

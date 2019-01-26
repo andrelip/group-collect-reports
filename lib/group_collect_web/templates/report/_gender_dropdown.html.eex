@@ -5,8 +5,8 @@
         </a>
         
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item <%= show_active_tag(@conn, @params, "gender", "male") %>" href="<%= add_filter(@conn, @params, "gender", "male") %>">Male</a>
-          <a class="dropdown-item <%= show_active_tag(@conn, @params, "gender", "female") %>" href="<%= add_filter(@conn, @params, "gender", "female") %>">Female</a>
+          <a class="dropdown-item <%= show_active_tag(@params, "gender", "male") %>" href="<%= add_filter(@conn, @params, "gender", "male") %>">Male</a>
+          <a class="dropdown-item <%= show_active_tag(@params, "gender", "female") %>" href="<%= add_filter(@conn, @params, "gender", "female") %>">Female</a>
           <a class="dropdown-item " href="<%= remove_filter(@conn, @params, "gender") %>">All</a>
         </div>
       </div>

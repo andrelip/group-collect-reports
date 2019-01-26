@@ -34,7 +34,7 @@ defmodule GroupCollect.Report.Import do
       |> Enum.map(fn {id, matches} ->
         case length(matches) do
           1 -> nil
-          match -> id
+          _ -> id
         end
       end)
       |> Enum.filter(&(&1 != nil))

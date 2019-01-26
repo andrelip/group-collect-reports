@@ -27,7 +27,7 @@ defmodule GroupCollect.Report.CSVParser do
   @doc """
   Verifies if the csv are well formated and contains all the required columns
   """
-  @spec validate_header(csv_content()) :: boolean()
+  @spec validate_header(csv_content()) :: :ok | {:error, list(String.t())}
   def validate_header(string) do
     [header | _] = parse_raw(string)
 

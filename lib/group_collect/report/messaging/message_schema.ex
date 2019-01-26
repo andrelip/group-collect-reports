@@ -1,4 +1,5 @@
 defmodule GroupCollect.Report.MessageSchema do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 
