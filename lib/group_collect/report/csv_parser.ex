@@ -31,9 +31,9 @@ defmodule GroupCollect.Report.CSVParser do
   def validate_header(string) do
     [header | _] = parse_raw(string)
 
-    case validate_header_keys(header) do
-      true -> true
-      false -> false
+    case find_missing_keys(header) do
+      [] -> :ok
+      missing_keys -> {:error, missing_keys}
     end
   end
 
@@ -44,8 +44,11 @@ defmodule GroupCollect.Report.CSVParser do
           {:error, %{msg: binary(), required: [binary(), ...]}} | {:ok, [ReportRow.t(), ...]}
   def parse(string) do
     case validate_header(string) do
-      true -> {:ok, parse_valid(string)}
-      false -> {:error, %{msg: "missing_required_keys", required: @header_keys}}
+      :ok ->
+        {:ok, parse_valid(string)}
+
+      {:error, missing_keys} ->
+        {:error, %{msg: "missing_required_keys", required: @header_keys, missing: missing_keys}}
     end
   end
 
@@ -83,12 +86,7 @@ defmodule GroupCollect.Report.CSVParser do
     end)
   end
 
-  defp validate_header_keys(header) do
-    have_invalid_key =
-      @header_keys
-      |> Enum.map(&Enum.member?(header, &1))
-      |> Enum.member?(false)
-
-    !have_invalid_key
+  defp find_missing_keys(header) do
+    @header_keys -- header
   end
 end

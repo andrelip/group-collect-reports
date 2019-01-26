@@ -12,6 +12,24 @@ defmodule GroupCollectWeb.Report.ImportController do
 
     with {:ok, _} <- Report.from_csv(csv_content) do
       redirect(conn, to: Routes.report_path(conn, :index))
+    else
+      {:error, %{duplicated_entries: entries}} ->
+        conn
+        |> put_flash(
+          :error,
+          "Error loading csv because it have duplicated entries: #{Enum.join(entries, ", ")}. You can upload existing ids but you cannot have duplicated entries at the same csv."
+        )
+        |> render("new.html")
+
+      {:error, %{msg: "missing_required_keys", missing: missing}} ->
+        conn
+        |> put_flash(
+          :error,
+          "Error loading csv because it is malformed or lacking required columns. Missing keys: #{
+            missing |> Enum.join(", ")
+          }"
+        )
+        |> render("new.html")
     end
   end
 end
