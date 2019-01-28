@@ -9,6 +9,7 @@ defmodule GroupCollectWeb.Report.ChartController do
 
     {graph_labels, graph_values} =
       Analyze.summarize_by_package_for_paid_passengers(include_wizard: include_wizard)
+      |> Map.from_struct()
       |> Enum.unzip()
 
     render(conn, "package.html",

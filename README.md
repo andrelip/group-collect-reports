@@ -1,6 +1,6 @@
 # GroupCollect
 
-To start your Phoenix server:
+To start your server:
 
   * Install dependencies with `mix deps.get`
   * Create a `config/dev.exs` and `config/test.exs` based on their examples in the same folder
@@ -10,12 +10,22 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Deployment with Docker
 
-## Learn more
+Build a docker image:
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+  * Install Docker and Docker Compose
+  * Create a `docker-compose.yml` from the `docker-compose.yml.example`
+  * Run `./make_release.sh`
+
+To run set the env variales and execute the image with your preferred Docker flow.
+
+You can use locally with Docker by executing `docker-compose up release`
+
+## Deployment using a Distillery release
+
+Build a docker image:
+
+  * Set the `prod.exs` and `prod.secret.exs`
+  * Run `chmod +x docker/scripts/prepare-build`
+  * Run `docker/scripts/prepare-build`

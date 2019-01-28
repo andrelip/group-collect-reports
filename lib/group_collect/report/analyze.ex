@@ -6,20 +6,26 @@ defmodule GroupCollect.Report.Analyze do
 
   alias GroupCollect.Repo
   alias GroupCollect.Report.ReportRowView
+  alias GroupCollect.Report.Analyzer.PackageChart
+  alias GroupCollect.Report.Analyzer.StatusChart
 
   @doc """
   Group and count by statuses using all the passengers as source
   """
   def summarize_by_statuses do
-    from(r in ReportRowView,
-      group_by: r.status,
-      select: {
-        r.status,
-        count(r.status)
-      }
-    )
-    |> Repo.all()
-    |> Enum.into(%{})
+    struct_params =
+      from(r in ReportRowView,
+        group_by: r.status,
+        select: {
+          r.status,
+          count(r.status)
+        }
+      )
+      |> Repo.all()
+      |> Enum.map(fn {key, value} -> {String.to_atom(key), value} end)
+      |> Enum.into(%{})
+
+    struct(%StatusChart{}, struct_params)
   end
 
   @doc """
@@ -27,15 +33,19 @@ defmodule GroupCollect.Report.Analyze do
   as source
   """
   def summarize_by_statuses(filter) do
-    from(r in filter,
-      group_by: r.status,
-      select: {
-        r.status,
-        count(r.status)
-      }
-    )
-    |> Repo.all()
-    |> Enum.into(%{})
+    struct_params =
+      from(r in filter,
+        group_by: r.status,
+        select: {
+          r.status,
+          count(r.status)
+        }
+      )
+      |> Repo.all()
+      |> Enum.map(fn {key, value} -> {String.to_atom(key), value} end)
+      |> Enum.into(%{})
+
+    struct(%StatusChart{}, struct_params)
   end
 
   @doc """
@@ -45,30 +55,31 @@ defmodule GroupCollect.Report.Analyze do
   include_wizard -> also counts the users that completed the wizard
   """
   def summarize_by_package_for_paid_passengers(params \\ []) do
-    case params[:include_wizard] do
-      false ->
-        from(r in ReportRowView,
-          where: r.status == "Fully Paid" or r.status == "Partially Paid",
-          group_by: r.package,
-          select: {
-            r.package,
-            count(r.package)
-          }
+    struct_params =
+      ReportRowView
+      |> filter_by_paid_status(params[:include_wizard])
+      |> group_by([r], r.package)
+      |> select([r], {r.package, count(r.package)})
+      |> Repo.all()
+      |> Enum.map(fn {key, value} -> {String.to_atom(key), value} end)
+      |> Enum.into(%{})
+
+    struct(%PackageChart{}, struct_params)
+  end
+
+  defp filter_by_paid_status(query, include_wizard) do
+    case include_wizard do
+      true ->
+        query
+        |> where(
+          [r],
+          r.status == "Fully Paid" or r.status == "Partially Paid" or
+            r.status == "Finished Wizard"
         )
 
-      true ->
-        from(r in ReportRowView,
-          where:
-            r.status == "Fully Paid" or r.status == "Partially Paid" or
-              r.status == "Finished Wizard",
-          group_by: r.package,
-          select: {
-            r.package,
-            count(r.package)
-          }
-        )
+      false ->
+        query
+        |> where([r], r.status == "Fully Paid" or r.status == "Partially Paid")
     end
-    |> Repo.all()
-    |> Enum.into(%{})
   end
 end

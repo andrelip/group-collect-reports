@@ -17,7 +17,7 @@ defmodule GroupCollectWeb.ReportController do
     packages = Report.all_existing_packages()
 
     {graph_labels, graph_values} =
-      passengers_query |> Analyze.summarize_by_statuses() |> Enum.unzip()
+      passengers_query |> Analyze.summarize_by_statuses() |> Map.from_struct() |> Enum.unzip()
 
     render(conn, "index.html",
       params: params,
